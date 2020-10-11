@@ -17,7 +17,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-router.post('/workout', async (req, res) =>{
+router.post('/', async (req, res) =>{
     try {
         const {type, lat, lon, duration, comments} = req.body;
         if (!type || !lat || !lon || !duration){
@@ -32,7 +32,7 @@ router.post('/workout', async (req, res) =>{
     }
 })
 
-router.put('/workout/:id', async (req, res) =>{
+router.put('/:id', async (req, res) =>{
     try {
         const {type, lat, lon, duration, comments} = req.body;
         let pollutionLevel;
@@ -43,7 +43,6 @@ router.put('/workout/:id', async (req, res) =>{
         if (update < 1) {
             res.status(404).json({ message: 'id does not exist' });
         }
-        let updatedWorkout = await Workout.findOne({where : {id: req.params.id}});
         res.json("updated"); 
     }
     catch(err){
@@ -51,7 +50,7 @@ router.put('/workout/:id', async (req, res) =>{
     }
 })
 
-router.delete('/workout/:id', async (req, res) =>{
+router.delete('/:id', async (req, res) =>{
     try {
         await Workout.destroy({where: {id: req.params.id}});
         res.json({ message:"Successfully deleted"}); 
@@ -61,7 +60,7 @@ router.delete('/workout/:id', async (req, res) =>{
     }
 })
 
-router.get('/workouts', async (req, res) =>{
+router.get('/', async (req, res) =>{
     try {
         const {startDate, endDate, minPollution, maxPollution} = req.body;
         let workouts = await Workout.findAll({where : { [Op.and] : [
